@@ -57,11 +57,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background-co
   
 .selectors-row { display: flex; gap: 8px; width: 100%; justify-content: center; max-width: 450px; } 
 
-.btn-view {
-    background: white; border: none; padding: 10px; border-radius: 12px;
-    font-size: 16px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    display: flex; align-items: center; justify-content: center; width: 45px;
-}
+
 
 .menu-dropdown { position: relative; flex: 1; }
 .btn-menu { 
@@ -84,8 +80,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background-co
     z-index: 10005; padding: 15px; border: 1px solid #eee;
 }
 
-.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; transition: all 0.3s ease; }
-.grid.single-column { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
+.grid { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); /* Esto obliga a que siempre sean 2 columnas */
+    gap: 10px; 
+    padding: 10px; 
+}
+
 
 .card { background: white; border-radius: 18px; padding: 10px; display: flex; flex-direction: column; text-align: center; } 
   
