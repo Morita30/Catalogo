@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frenos Dulanto - Catálogo</title>
+    <title>Frenos Dulanto - Catálogo Profesional</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body> 
@@ -14,7 +14,8 @@
 
 <div class="sticky-controls">
   <div class="header-controls">
-    <input type="text" id="bus" class="search-input" placeholder="Buscar producto..." onkeyup="ejecutarFiltro()">
+    <input type="text" id="bus" class="search-input" placeholder="🔍 Buscar producto..." onkeyup="ejecutarFiltro()">
+    
     <div class="selectors-row">
       <div class="menu-dropdown">
         <button class="btn-menu" onclick="toggleMenu('mCat', event)">⚙️ <span id="lCat">Piezas</span></button>
@@ -28,6 +29,7 @@
           <div class="menu-item" onclick="setFiltro('cat', 'embrague', 'Embragues', this, event)">Embragues</div>
         </div>
       </div>
+
       <div class="menu-dropdown">
         <button class="btn-menu" onclick="toggleMenu('mMar', event)">🚗 <span id="lMar">Marcas</span></button>
         <div class="menu-content" id="mMar">
@@ -37,13 +39,13 @@
           <div class="menu-item" onclick="setFiltro('marca', 'hyundai', 'Hyundai', this, event)">Hyundai</div>
           <div class="menu-item" onclick="setFiltro('marca', 'kia', 'Kia', this, event)">Kia</div>
           <div class="menu-item" onclick="setFiltro('marca', 'mitsubishi', 'Mitsubishi', this, event)">Mitsubishi</div>
-</div>
-  </div>
-<button class="btn-cart-header" id="btnCart" onclick="toggleCartModal(event)">
-    🛒 <span class="badge-header" id="cartBadge">0</span>
-  </button>
         </div>
       </div>
+
+      <button class="btn-cart-header" id="btnCart" onclick="toggleCartModal(event)">
+        🛒 <span class="badge-header" id="cartBadge">0</span>
+      </button>
+
     </div>
   </div>
 </div> 
@@ -63,10 +65,10 @@
   let cart = {};
   let fCat = 'todas', fMarca = 'todas'; 
 
+  // --- FUNCIÓN DE RENDERIZADO MEJORADA (Incluye indicadores) ---
   function renderProductos() {
     const cont = document.getElementById('contenedor');
     cont.innerHTML = "";
-    // Usamos productosData que viene del archivo database.js
     productosData.forEach((p, i) => {
       cont.innerHTML += `
         <div class="card" data-tipo="${p.c}" data-marca="${p.m}" data-full="${p.n} ${p.m}">
@@ -74,9 +76,10 @@
             <div class="carousel-track" id="track-${i}" data-idx="0">
               <img src="${imgUrlBase}"><img src="${imgUrlBase}"><img src="${imgUrlBase}">
             </div>
-            <div class="nav-arrows">
-              <button class="arrow-btn" onclick="moveCarousel(${i}, -1, event)">‹</button>
-              <button class="arrow-btn" onclick="moveCarousel(${i}, 1, event)">›</button>
+            <div class="carousel-indicators">
+              <span class="dot active" data-dot="0"></span>
+              <span class="dot" data-dot="1"></span>
+              <span class="dot" data-dot="2"></span>
             </div>
           </div>
           <div class="brand-tag">${p.m}</div>
@@ -87,30 +90,36 @@
     });
   }
 
-  // --- LÓGICA DE FUNCIONAMIENTO ---
+  // --- NUEVA LÓGICA DE CARRUSEL (Infinita y con Indicadores) ---
   let touchStartX = 0;
   function handleTouchStart(e, id) { touchStartX = e.changedTouches[0].screenX; }
   function handleTouchEnd(e, id) {
     let touchEndX = e.changedTouches[0].screenX;
     let diff = touchStartX - touchEndX;
-    if (Math.abs(diff) > 40) moveCarousel(id, diff > 0 ? 1 : -1);
+    if (Math.abs(diff) > 40) moveCarouselInfinite(id, diff > 0 ? 1 : -1);
   }
 
-  function moveCarousel(id, dir, e) {
-    if(e) e.stopPropagation();
+  function moveCarouselInfinite(id, dir) {
+    const container = document.getElementById(`container-${id}`);
     const track = document.getElementById(`track-${id}`);
+    const indicators = container.querySelectorAll('.dot');
     if(!track) return;
-    let idx = (parseInt(track.getAttribute('data-idx')) + dir + 3) % 3;
-    track.style.transform = `translateX(-${idx * 33.333}%)`;
-    track.setAttribute('data-idx', idx);
-  } 
 
-  function toggleView() {
-    const grid = document.getElementById('contenedor');
-    grid.classList.toggle('single-column');
-    document.getElementById('viewIcon').innerText = grid.classList.contains('single-column') ? '🔲' : '📱';
+    let currentIdx = parseInt(track.getAttribute('data-idx'));
+    
+    // Nueva posición con lógica infinita (Sin fin)
+    let nextIdx = (currentIdx + dir + 3) % 3;
+
+    // Movimiento
+    track.style.transform = `translateX(-${nextIdx * 33.333}%)`;
+    track.setAttribute('data-idx', nextIdx);
+
+    // Actualizar Indicadores
+    indicators.forEach(i => i.classList.remove('active'));
+    indicators[nextIdx].classList.add('active');
   }
 
+  // --- LÓGICA DE FUNCIONAMIENTO ---
   function ejecutarFiltro() {
     const query = document.getElementById('bus').value.toLowerCase().trim();
     const palabras = query.split(/\s+/); 
