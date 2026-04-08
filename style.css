@@ -61,13 +61,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background-co
     display: flex; 
     gap: 8px; 
     width: 100%; 
-    justify-content: center; max-width: 450px; } 
+    justify-content: center; max-width: 500px; } 
 
 
 
 .menu-dropdown { position: relative; flex: 1; }
 .btn-menu { 
-    background: white; border: none; padding: 10px; border-radius: 12px; 
+    background: white; border: none; padding: 10px 5px; border-radius: 12px; 
     font-size: 12px; font-weight: 700; cursor: pointer; width: 100%; 
     box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center;
 }
