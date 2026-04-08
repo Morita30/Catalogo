@@ -209,3 +209,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background-co
 .hidden { display: none !important; }
 
 .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f2f2f2; }
+
+/* Animación del producto volando */
+.flying-item {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    background: #007bff; /* El azul de tu marca */
+    border-radius: 10px;
+    z-index: 99999;
+    pointer-events: none;
+    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.8;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
