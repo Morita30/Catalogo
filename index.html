@@ -19,10 +19,10 @@
     <div class="selectors-row">
       <div class="menu-dropdown">
         <button class="btn-menu" id="btnCat" onclick="toggleMenu('mCat', 'btnCat', event)">
-          <span>⚙️ <span id="lCat">Pieza</span></span>
+          <span>⚙️ <span id="lCat">Todas</span></span>
         </button>
         <div class="menu-content" id="mCat">
-          <div class="menu-item active" onclick="setFiltro('cat', 'todas', 'Todas', this, event)">Pieza</div>
+          <div class="menu-item active" onclick="setFiltro('cat', 'todas', 'Todas', this, event)">Todas</div>
           <div class="menu-item" onclick="setFiltro('cat', 'pastilla', 'Pastillas', this, event)">Pastillas</div>
           <div class="menu-item" onclick="setFiltro('cat', 'disco', 'Discos', this, event)">Discos</div>
           <div class="menu-item" onclick="setFiltro('cat', 'zapata', 'Zapatas', this, event)">Zapatas</div>
@@ -34,10 +34,10 @@
 
       <div class="menu-dropdown">
         <button class="btn-menu" id="btnMar" onclick="toggleMenu('mMar', 'btnMar', event)">
-          <span>🚗 <span id="lMar">Marcas</span></span>
+          <span>🚗 <span id="lMar">Todas Marcas</span></span>
         </button>
         <div class="menu-content" id="mMar">
-          <div class="menu-item active" onclick="setFiltro('marca', 'todas', 'Todas', this, event)">Marcas</div>
+          <div class="menu-item active" onclick="setFiltro('marca', 'todas', 'Todas Marcas', this, event)">Todas Marcas</div>
           <div class="menu-item" onclick="setFiltro('marca', 'toyota', 'Toyota', this, event)">Toyota</div>
           <div class="menu-item" onclick="setFiltro('marca', 'nissan', 'Nissan', this, event)">Nissan</div>
           <div class="menu-item" onclick="setFiltro('marca', 'hyundai', 'Hyundai', this, event)">Hyundai</div>
@@ -198,7 +198,6 @@
     const btn = document.getElementById(btnId);
     const isShowing = menu.classList.contains('show');
 
-    // Cerrar todo lo demás
     document.querySelectorAll('.menu-content').forEach(m => m.classList.remove('show'));
     document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('open'));
     document.getElementById('cartModal').style.display = 'none';
@@ -222,10 +221,16 @@
       const btn = document.getElementById('btnMar');
       if(val === 'todas') btn.classList.remove('active-filter'); else btn.classList.add('active-filter');
     }
-    document.querySelectorAll(`#m${tipo === 'cat' ? 'Cat' : 'Mar'} .menu-item`).forEach(i => i.classList.remove('active'));
+    
+    // Marcar item activo en su menú específico
+    const menuId = (tipo === 'cat' ? 'mCat' : 'mMar');
+    document.querySelectorAll(`#${menuId} .menu-item`).forEach(i => i.classList.remove('active'));
     el.classList.add('active');
+    
+    // Cerrar menús
     document.querySelectorAll('.menu-content').forEach(m => m.classList.remove('show'));
     document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('open'));
+    
     ejecutarFiltro();
   }
 
