@@ -12,6 +12,8 @@ const productosData = [
         p: 120,
         d: "Pastillas de freno de alto rendimiento, mayor durabilidad y mejor frenado.",
         code: "TOY-PH-001",
+        top: true,
+        offer: true
         imgs: [
             "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2",
             "https://images.unsplash.com/photo-1583267746897-2cf415887172",
@@ -25,6 +27,7 @@ const productosData = [
         p: 180,
         d: "Disco ventilado para mejor disipación de calor y rendimiento constante.",
         code: "NIS-DI-002",
+        offer: true
         imgs: [
             "https://images.unsplash.com/photo-1625047509248-ec889cbff17f",
             "https://images.unsplash.com/photo-1597764690523-15bea4c581c9"
@@ -37,6 +40,8 @@ const productosData = [
         p: 250,
         d: "Amortiguador reforzado ideal para terrenos exigentes.",
         code: "TOY-AM-003",
+        top: true,
+        
         imgs: [
             "https://images.unsplash.com/photo-1615906655593-ad0386982a0f",
             "https://images.unsplash.com/photo-1593941707882-a56bbc8dfc58"
@@ -49,6 +54,8 @@ const productosData = [
         p: 420,
         d: "Radiador de alta eficiencia para mantener la temperatura ideal del motor.",
         code: "HYU-RA-004",
+        top: true,
+        offer: true
         imgs: [
             "https://images.unsplash.com/photo-1581091870622-1e7c1e9b4c85",
             "https://images.unsplash.com/photo-1604147706283-6c1a4e8d3d11"
