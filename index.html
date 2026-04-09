@@ -11,11 +11,11 @@
 <div class="brand-bar"><img src="logo.png" class="brand-logo"></div>
 
 <div class="sticky-controls">
-    <input type="text" id="bus" class="search-input" placeholder="Buscar..." onkeyup="ejecutarFiltro()">
+    <input type="text" id="bus" class="search-input" placeholder="🔍 Buscar repuesto..." onkeyup="ejecutarFiltro()">
     <div class="selectors-row">
-        <button class="btn-menu" id="btnCat" onclick="toggleMenu('mCat', event)">⚙️ <span id="lCat">Piezas</span></button>
-        <button class="btn-menu" id="btnMar" onclick="toggleMenu('mMar', event)">🚗 <span id="lMar">Marcas</span></button>
-        <button class="btn-cart-header" id="btnCart" onclick="toggleCart()">🛒 <span id="cartBadge">0</span></button>
+        <button class="btn-menu" id="btnCat">⚙️ <span id="lCat">Piezas</span></button>
+        <button class="btn-menu" id="btnMar">🚗 <span id="lMar">Marcas</span></button>
+        <button class="btn-cart-header" id="btnCart">🛒 <span id="cartBadge">0</span></button>
     </div>
 </div>
 
@@ -28,62 +28,7 @@
 </div>
 
 <script src="database.js"></script>
-<script>
-let cart = {}; let fCat = 'todas', fMar = 'todas';
+<script src="script.js"></script>
 
-function renderProductos() {
-    const cont = document.getElementById('contenedor');
-    cont.innerHTML = "";
-    productosData.forEach(p => {
-        cont.innerHTML += `
-            <div class="card" onclick="openModal(${p.id})">
-                <img src="${imgUrlBase}" style="width:100%; border-radius:10px;">
-                <h3>${p.n}</h3>
-                <div class="card-buttons">
-                    <button class="btn-ver" onclick="event.stopPropagation(); openModal(${p.id})">Ver más</button>
-                    <button class="btn-add" onclick="event.stopPropagation(); addToCart('${p.n}', ${p.p}, event)">Añadir</button>
-                </div>
-            </div>`;
-    });
-}
-
-function openModal(id) {
-    const p = productosData.find(x => x.id === id);
-    document.getElementById('modalBody').innerHTML = `
-        <h2>${p.n}</h2>
-        <p><b>OEM:</b> ${p.oem}</p>
-        <p><b>Compatibilidad:</b> ${p.compatibilidad}</p>
-        <button class="btn-add" style="width:100%; padding:15px;" onclick="addToCart('${p.n}', ${p.p}, event)">Añadir al pedido</button>
-    `;
-    document.getElementById('productModal').style.display = 'flex';
-}
-
-function addToCart(name, price, e) {
-    if (cart[name]) cart[name].qty++; else cart[name] = { price, qty: 1 };
-    
-    // Animación de Vuelo
-    const btn = document.getElementById('btnCart');
-    const rect = btn.getBoundingClientRect();
-    const flyer = document.createElement('div');
-    flyer.className = 'flying-item';
-    flyer.style.left = e.clientX + 'px'; flyer.style.top = e.clientY + 'px';
-    document.body.appendChild(flyer);
-
-    setTimeout(() => {
-        flyer.style.left = rect.left + 'px'; flyer.style.top = rect.top + 'px';
-        flyer.style.transform = 'scale(0.1)'; flyer.style.opacity = '0';
-    }, 10);
-    setTimeout(() => { flyer.remove(); }, 700);
-    
-    document.getElementById('cartBadge').innerText = Object.values(cart).reduce((a, b) => a + b.qty, 0);
-}
-
-function ejecutarFiltro() {
-    // Aquí tu lógica de filtros...
-    renderProductos();
-}
-
-renderProductos();
-</script>
 </body>
 </html>
