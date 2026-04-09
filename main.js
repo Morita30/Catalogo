@@ -15,16 +15,12 @@ function renderProductos() {
     
     productosData.forEach((p, i) => {
         cont.innerHTML += `
-        <div class="card" onclick="openModal(${i})">
-
-  ${p.top ? `<div class="badge badge-top">Más vendido</div>` : ""}
-  ${p.offer ? `<div class="badge badge-offer">Oferta</div>` : ""}
-
-  <div class="carousel-container"> id="container-${i}" ontouchstart="handleTouchStart(event, ${i})" ontouchend="handleTouchEnd(event, ${i})">
+        <div class="card" data-tipo="${p.c}" data-marca="${p.m}" data-full="${p.n} ${p.m}">
+          <div class="carousel-container" id="container-${i}" ontouchstart="handleTouchStart(event, ${i})" ontouchend="handleTouchEnd(event, ${i})">
             <div class="carousel-track" id="track-${i}" data-idx="1" data-cloning="false">
-              <img src="${p.imgs ? p.imgs[0] : imgUrlBase}"> 
-              <img src="${p.imgs ? p.imgs[0] : imgUrlBase}"><img src="${p.imgs ? p.imgs[0] : imgUrlBase}">
-              <img src="${p.imgs ? p.imgs[0] : imgUrlBase}">
+              <img src="${imgUrlBase}"> 
+              <img src="${imgUrlBase}"><img src="${imgUrlBase}"><img src="${imgUrlBase}">
+              <img src="${imgUrlBase}">
             </div>
             <div class="carousel-indicators">
               <span class="dot active" data-dot="0"></span>
@@ -35,7 +31,7 @@ function renderProductos() {
           <div class="brand-tag">${p.m}</div>
           <h3 style="font-size:12px; margin:3px 0; min-height:30px;">${p.n}</h3>
           <div class="price-tag">S/ ${p.p}.00</div>
-          <button class="btn-add" onclick="event.stopPropagation(); addToCart('${p.n}', ${p.p}, event)">Añadir</button>
+          <button class="btn-add" onclick="addToCart('${p.n}', ${p.p}, event)">Añadir</button>
         </div>`;
     });
 }
@@ -121,28 +117,13 @@ function addToCart(name, price, event) {
 function updateCartUI() {
     const list = document.getElementById('cartList');
     let total = 0, count = 0;
-
     list.innerHTML = "";
-
-    // 🛒 Si está vacío
-    if (Object.keys(cart).length === 0) {
-        list.innerHTML = "<p style='text-align:center; color:#8e8e93;'>Tu carrito está vacío 🛒</p>";
-        document.getElementById('cartBadge').innerText = 0;
-        document.getElementById('totalLabel').innerText = "S/ 0";
-        return;
-    }
-
-    // 🧾 Si hay productos
     for (const n in cart) {
         total += cart[n].price * cart[n].qty;
         count += cart[n].qty;
-
         list.innerHTML += `
         <div class="cart-item">
-          <div style="text-align:left; font-size:12px">
-            <strong>${n}</strong><br>
-            S/ ${cart[n].price * cart[n].qty}
-          </div>
+          <div style="text-align:left; font-size:12px"><strong>${n}</strong><br>S/ ${cart[n].price * cart[n].qty}</div>
           <div style="display:flex; align-items:center; gap:5px">
             <button class="btn-qty" onclick="changeQty('${n}', -1, event)">-</button>
             <span style="font-weight:700">${cart[n].qty}</span>
@@ -150,7 +131,6 @@ function updateCartUI() {
           </div>
         </div>`;
     }
-
     document.getElementById('cartBadge').innerText = count;
     document.getElementById('totalLabel').innerText = `S/ ${total}`;
 }
@@ -225,28 +205,3 @@ window.onclick = () => closeAllMenus();
 
 // Inicialización
 renderProductos();
-
-let modalProduct = null;
-
-function openModal(index) {
-    const product = productosData[index];
-    modalProduct = product;
-
-    document.getElementById('modalImg').src = imgUrlBase;
-    document.getElementById('modalTitle').innerText = product.n;
-    document.getElementById('modalBrand').innerText = product.m;
-    document.getElementById('modalPrice').innerText = "S/ " + product.p;
-
-    document.getElementById('productModal').classList.add('show');
-}
-
-function closeModal() {
-    document.getElementById('productModal').classList.remove('show');
-}
-
-// Cerrar tocando fuera
-document.getElementById('productModal').addEventListener('click', function(e) {
-    if (e.target.id === 'productModal') {
-        closeModal();
-    }
-});
