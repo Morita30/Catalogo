@@ -117,19 +117,28 @@ function addToCart(name, price, event) {
 function updateCartUI() {
     const list = document.getElementById('cartList');
     let total = 0, count = 0;
+
     list.innerHTML = "";
-if (Object.keys(cart).length === 0) {
-    list.innerHTML = "<p style='text-align:center; color:#8e8e93;'>Tu carrito está vacío 🛒</p>";
-    document.getElementById('cartBadge').innerText = 0;
-    document.getElementById('totalLabel').innerText = "S/ 0";
-    return;
-}
+
+    // 🛒 Si está vacío
+    if (Object.keys(cart).length === 0) {
+        list.innerHTML = "<p style='text-align:center; color:#8e8e93;'>Tu carrito está vacío 🛒</p>";
+        document.getElementById('cartBadge').innerText = 0;
+        document.getElementById('totalLabel').innerText = "S/ 0";
+        return;
+    }
+
+    // 🧾 Si hay productos
     for (const n in cart) {
         total += cart[n].price * cart[n].qty;
         count += cart[n].qty;
+
         list.innerHTML += `
         <div class="cart-item">
-          <div style="text-align:left; font-size:12px"><strong>${n}</strong><br>S/ ${cart[n].price * cart[n].qty}</div>
+          <div style="text-align:left; font-size:12px">
+            <strong>${n}</strong><br>
+            S/ ${cart[n].price * cart[n].qty}
+          </div>
           <div style="display:flex; align-items:center; gap:5px">
             <button class="btn-qty" onclick="changeQty('${n}', -1, event)">-</button>
             <span style="font-weight:700">${cart[n].qty}</span>
@@ -137,6 +146,7 @@ if (Object.keys(cart).length === 0) {
           </div>
         </div>`;
     }
+
     document.getElementById('cartBadge').innerText = count;
     document.getElementById('totalLabel').innerText = `S/ ${total}`;
 }
