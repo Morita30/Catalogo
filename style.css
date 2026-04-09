@@ -8,7 +8,7 @@
 }
 body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background-color: var(--gris-fondo); margin: 0; padding: 0; overflow-x: hidden; color: var(--texto-negro); } 
 
-/* --- BARRA DEL TITULO (LOGO CENTRADO) --- */
+/* --- BARRA DEL TITULO --- */
 .brand-bar {
     background: #000000;
     padding: 15px 0;
@@ -81,7 +81,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background-co
     transition: all 0.3s ease;
 }
 
-/* Flecha (Caret) */
 .btn-menu::after {
     content: '▼';
     font-size: 8px;
@@ -90,7 +89,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background-co
     color: var(--texto-gris);
 }
 
-/* Rotación cuando está abierto */
 .btn-menu.open::after {
     transform: rotate(180deg);
 }
@@ -101,7 +99,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background-co
     border: 1px solid #bbdefb;
 }
 
-/* --- MENÚS DESPLEGABLES MEJORADOS --- */
+/* --- MENÚS DESPLEGABLES --- */
 .menu-content { 
     display: block; 
     position: absolute; 
@@ -114,7 +112,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background-co
     box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
     border: 1px solid #eee; 
     overflow-y: auto; 
-    max-height: 0; /* Controlamos apertura con altura */
+    max-height: 0; 
     opacity: 0;
     pointer-events: none;
     transform: translateY(-10px);
