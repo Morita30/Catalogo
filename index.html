@@ -18,7 +18,9 @@
 
     <div class="selectors-row">
       <div class="menu-dropdown">
-        <button class="btn-menu" onclick="toggleMenu('mCat', event)">⚙️ <span id="lCat">Pieza</span></button>
+        <button class="btn-menu" id="btnCat" onclick="toggleMenu('mCat', 'btnCat', event)">
+          <span>⚙️ <span id="lCat">Pieza</span></span>
+        </button>
         <div class="menu-content" id="mCat">
           <div class="menu-item active" onclick="setFiltro('cat', 'todas', 'Todas', this, event)">Todas</div>
           <div class="menu-item" onclick="setFiltro('cat', 'pastilla', 'Pastillas', this, event)">Pastillas</div>
@@ -31,7 +33,9 @@
       </div>
 
       <div class="menu-dropdown">
-        <button class="btn-menu" onclick="toggleMenu('mMar', event)">🚗 <span id="lMar">Marcas</span></button>
+        <button class="btn-menu" id="btnMar" onclick="toggleMenu('mMar', 'btnMar', event)">
+          <span>🚗 <span id="lMar">Marcas</span></span>
+        </button>
         <div class="menu-content" id="mMar">
           <div class="menu-item active" onclick="setFiltro('marca', 'todas', 'Todas', this, event)">Todas</div>
           <div class="menu-item" onclick="setFiltro('marca', 'toyota', 'Toyota', this, event)">Toyota</div>
@@ -65,12 +69,10 @@
   let cart = {};
   let fCat = 'todas', fMarca = 'todas'; 
 
-  // --- FUNCIÓN DE RENDERIZADO MEJORADA (Estructura para Loop Infinito) ---
   function renderProductos() {
     const cont = document.getElementById('contenedor');
     cont.innerHTML = "";
     productosData.forEach((p, i) => {
-      // Estructura HTML para loop: [Clon 3] [1] [2] [3] [Clon 1]
       cont.innerHTML += `
         <div class="card" data-tipo="${p.c}" data-marca="${p.m}" data-full="${p.n} ${p.m}">
           <div class="carousel-container" id="container-${i}" ontouchstart="handleTouchStart(event, ${i})" ontouchend="handleTouchEnd(event, ${i})">
@@ -93,16 +95,11 @@
     });
   }
 
-  // --- LÓGICA DE CARRUSEL INFINITO REAL (Con Clonación y Reposicionamiento) ---
   let touchStartX = 0;
-  function handleTouchStart(e, id) { 
-    touchStartX = e.changedTouches[0].screenX; 
-  }
-
+  function handleTouchStart(e, id) { touchStartX = e.changedTouches[0].screenX; }
   function handleTouchEnd(e, id) {
     let touchEndX = e.changedTouches[0].screenX;
     let diff = touchStartX - touchEndX;
-    // Sensibilidad del swipe
     if (Math.abs(diff) > 40) moveCarouselInfinite(id, diff > 0 ? 1 : -1);
   }
 
@@ -110,58 +107,28 @@
     const track = document.getElementById(`track-${id}`);
     const container = document.getElementById(`container-${id}`);
     const indicators = container.querySelectorAll('.dot');
-    
-    // Bloquear si ya estamos reposicionando un clon
     if (!track || track.getAttribute('data-cloning') === 'true') return;
-
-    // Índice actual basado en la estructura de 5 imágenes (0 a 4)
-    // Empezamos en 1 (primera real), no 0 (clon de la última)
     let currentIdx = parseInt(track.getAttribute('data-idx'));
-    
-    // Calcular siguiente índice sin restricciones
     let nextIdx = currentIdx + dir;
-
-    // Habilitar animación para el movimiento normal
     track.classList.remove('no-transition');
-    
-    // Mover (cada imagen es 20% del ancho del track)
     track.style.transform = `translateX(-${nextIdx * 20}%)`;
     track.setAttribute('data-idx', nextIdx);
-
-    // Actualizar indicadores (basados en 0, 1, 2 reales)
     let indicatorIdx;
-    if (nextIdx === 4) indicatorIdx = 0;      // Estamos en clon de 1
-    else if (nextIdx === 0) indicatorIdx = 2; // Estamos en clon de 3
-    else indicatorIdx = nextIdx - 1;          // Ajuste índice real
-
+    if (nextIdx === 4) indicatorIdx = 0; else if (nextIdx === 0) indicatorIdx = 2; else indicatorIdx = nextIdx - 1;
     indicators.forEach(i => i.classList.remove('active'));
     indicators[indicatorIdx].classList.add('active');
-
-    // --- GESTIÓN DEL SALTO INVISIBLE (REPOSICIONAMIENTO) ---
-    // Si llegamos a un clon (índice 0 o 4), reposicionamos al terminar la animación
     if (nextIdx === 0 || nextIdx === 4) {
-      track.setAttribute('data-cloning', 'true'); // Bloquear nuevos swipes
-
-      // Esperar a que termine la transición CSS (0.4s)
+      track.setAttribute('data-cloning', 'true');
       setTimeout(() => {
-        // Quitar animación instantáneamente
         track.classList.add('no-transition');
-
-        let jumpIdx;
-        if (nextIdx === 4) jumpIdx = 1; // De clon 1 saltar a 1 real
-        if (nextIdx === 0) jumpIdx = 3; // De clon 3 saltar a 3 real
-
-        // Mover instantáneamente
+        let jumpIdx = (nextIdx === 4) ? 1 : 3;
         track.style.transform = `translateX(-${jumpIdx * 20}%)`;
         track.setAttribute('data-idx', jumpIdx);
-
-        // Desbloquear para siguientes swipes
         track.setAttribute('data-cloning', 'false');
-      }, 400); // Mismo tiempo que la transición CSS
+      }, 400);
     }
   }
 
-  // --- LÓGICA DE FUNCIONAMIENTO ---
   function ejecutarFiltro() {
     const query = document.getElementById('bus').value.toLowerCase().trim();
     const palabras = query.split(/\s+/); 
@@ -177,24 +144,19 @@
   function addToCart(name, price, event) {
     if (cart[name]) cart[name].qty++; else cart[name] = { price, qty: 1 };
     updateCartUI();
-
     const btnCart = document.getElementById('btnCart');
     const rectCart = btnCart.getBoundingClientRect();
-
     const flyer = document.createElement('div');
     flyer.className = 'flying-item';
     flyer.style.left = `${event.clientX - 20}px`;
     flyer.style.top = `${event.clientY - 20}px`;
-
     document.body.appendChild(flyer);
-
     setTimeout(() => {
         flyer.style.left = `${rectCart.left + (rectCart.width / 2) - 20}px`;
         flyer.style.top = `${rectCart.top + (rectCart.height / 2) - 20}px`;
         flyer.style.transform = 'scale(0.1)';
         flyer.style.opacity = '0';
     }, 10);
-
     setTimeout(() => {
         flyer.remove();
         btnCart.style.transition = 'transform 0.2s';
@@ -202,13 +164,6 @@
         setTimeout(() => btnCart.style.transform = 'scale(1)', 200);
     }, 700);
 }
-
-  function changeQty(name, delta, e) {
-    e.stopPropagation();
-    cart[name].qty += delta;
-    if (cart[name].qty <= 0) delete cart[name];
-    updateCartUI();
-  } 
 
   function updateCartUI() {
     const list = document.getElementById('cartList');
@@ -230,40 +185,57 @@
     document.getElementById('totalLabel').innerText = `S/ ${total}`;
   } 
 
-  function toggleMenu(id, e) {
+  function changeQty(name, delta, e) {
     e.stopPropagation();
-    const menu = document.getElementById(id);
-    const showing = menu.classList.contains('show');
+    cart[name].qty += delta;
+    if (cart[name].qty <= 0) delete cart[name];
+    updateCartUI();
+  }
+
+  function toggleMenu(menuId, btnId, e) {
+    e.stopPropagation();
+    const menu = document.getElementById(menuId);
+    const btn = document.getElementById(btnId);
+    const isShowing = menu.classList.contains('show');
+
+    // Cerrar todo lo demás
     document.querySelectorAll('.menu-content').forEach(m => m.classList.remove('show'));
-    if(!showing) menu.classList.add('show');
+    document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('open'));
     document.getElementById('cartModal').style.display = 'none';
+
+    if(!isShowing) {
+      menu.classList.add('show');
+      btn.classList.add('open');
+    }
   } 
 
   function setFiltro(tipo, val, txt, el, e) {
-  e.stopPropagation();
-  if(tipo === 'cat') { 
-    fCat = val; 
-    document.getElementById('lCat').innerText = txt; 
-    const btn = document.getElementById('lCat').parentElement;
-    if(val === 'todas') btn.classList.remove('active-filter'); else btn.classList.add('active-filter');
-  } 
-  else { 
-    fMarca = val; 
-    document.getElementById('lMar').innerText = txt; 
-    const btn = document.getElementById('lMar').parentElement;
-    if(val === 'todas') btn.classList.remove('active-filter'); else btn.classList.add('active-filter');
+    e.stopPropagation();
+    if(tipo === 'cat') { 
+      fCat = val; 
+      document.getElementById('lCat').innerText = txt; 
+      const btn = document.getElementById('btnCat');
+      if(val === 'todas') btn.classList.remove('active-filter'); else btn.classList.add('active-filter');
+    } else { 
+      fMarca = val; 
+      document.getElementById('lMar').innerText = txt; 
+      const btn = document.getElementById('btnMar');
+      if(val === 'todas') btn.classList.remove('active-filter'); else btn.classList.add('active-filter');
+    }
+    document.querySelectorAll(`#m${tipo === 'cat' ? 'Cat' : 'Mar'} .menu-item`).forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.menu-content').forEach(m => m.classList.remove('show'));
+    document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('open'));
+    ejecutarFiltro();
   }
-  document.querySelectorAll(`#m${tipo === 'cat' ? 'Cat' : 'Mar'} .menu-item`).forEach(i => i.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('.menu-content').forEach(m => m.classList.remove('show'));
-  ejecutarFiltro();
-}
 
   function toggleCartModal(e) {
     e.stopPropagation();
     const m = document.getElementById('cartModal');
-    m.style.display = m.style.display === 'block' ? 'none' : 'block';
+    const isVisible = m.style.display === 'block';
+    m.style.display = isVisible ? 'none' : 'block';
     document.querySelectorAll('.menu-content').forEach(m => m.classList.remove('show'));
+    document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('open'));
   }
 
   function sendWhatsApp() {
@@ -280,6 +252,7 @@
   window.onclick = () => {
     document.getElementById('cartModal').style.display = 'none';
     document.querySelectorAll('.menu-content').forEach(m => m.classList.remove('show'));
+    document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('open'));
   };
 
   renderProductos();
