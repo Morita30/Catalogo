@@ -15,7 +15,7 @@ function renderProductos() {
     
     productosData.forEach((p, i) => {
         cont.innerHTML += `
-        <div class="card" data-tipo="${p.c}" data-marca="${p.m}" data-full="${p.n} ${p.m}">
+        <div class="card" onclick='openModal(${JSON.stringify(p)})' data-tipo="${p.c}" data-marca="${p.m}" data-full="${p.n} ${p.m}">
           <div class="carousel-container" id="container-${i}" ontouchstart="handleTouchStart(event, ${i})" ontouchend="handleTouchEnd(event, ${i})">
             <div class="carousel-track" id="track-${i}" data-idx="1" data-cloning="false">
               <img src="${imgUrlBase}"> 
@@ -31,7 +31,7 @@ function renderProductos() {
           <div class="brand-tag">${p.m}</div>
           <h3 style="font-size:12px; margin:3px 0; min-height:30px;">${p.n}</h3>
           <div class="price-tag">S/ ${p.p}.00</div>
-          <button class="btn-add" onclick="addToCart('${p.n}', ${p.p}, event)">Añadir</button>
+          <button class="btn-add" onclick="event.stopPropagation(); addToCart('${p.n}', ${p.p}, event)">Añadir</button>
         </div>`;
     });
 }
