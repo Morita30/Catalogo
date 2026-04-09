@@ -118,6 +118,12 @@ function updateCartUI() {
     const list = document.getElementById('cartList');
     let total = 0, count = 0;
     list.innerHTML = "";
+if (Object.keys(cart).length === 0) {
+    list.innerHTML = "<p style='text-align:center; color:#8e8e93;'>Tu carrito está vacío 🛒</p>";
+    document.getElementById('cartBadge').innerText = 0;
+    document.getElementById('totalLabel').innerText = "S/ 0";
+    return;
+}
     for (const n in cart) {
         total += cart[n].price * cart[n].qty;
         count += cart[n].qty;
