@@ -156,8 +156,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background-co
 
 /* --- TARJETA DE PRODUCTO --- */
 .card { background: white; border-radius: 18px; padding: 10px; display: flex; flex-direction: column; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); } 
-  
-/* --- NUEVO CARRUSEL PROFESIONAL --- */
+
+/* --- NUEVO CARRUSEL PROFESIONAL MODIFICADO PARA LOOP INFINITO --- */
 .carousel-container { 
     position: relative; 
     width: 100%; 
@@ -170,12 +170,22 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background-co
 }
 .carousel-track { 
     display: flex; 
+    /* Transición suave por defecto */
     transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
-    width: 300%; 
+    /* Ahora son 5 imágenes: Clon Última + 3 Reales + Clon Primera */
+    width: 500%; 
     height: 100%; 
+    /* Empezamos en la página 1 (la primera imagen real), no la 0 */
+    transform: translateX(-20%); 
 }
-.carousel-track img { width: 33.333%; height: 100%; object-fit: cover; pointer-events: none; }
-  
+/* Cada imagen ocupa el 20% del ancho del track (1/5) */
+.carousel-track img { width: 20%; height: 100%; object-fit: cover; pointer-events: none; }
+
+/* Clase auxiliar para quitar la animación durante el reposicionamiento */
+.no-transition {
+    transition: none !important;
+}
+
 /* INDICADORES DE LÍNEAS */
 .carousel-indicators {
     position: absolute;
