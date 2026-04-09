@@ -18,9 +18,9 @@ function renderProductos() {
         <div class="card" onclick='openModal(${JSON.stringify(p)})' data-tipo="${p.c}" data-marca="${p.m}" data-full="${p.n} ${p.m}">
           <div class="carousel-container" id="container-${i}" ontouchstart="handleTouchStart(event, ${i})" ontouchend="handleTouchEnd(event, ${i})">
             <div class="carousel-track" id="track-${i}" data-idx="1" data-cloning="false">
-              <img src="${imgUrlBase}"> 
-              <img src="${imgUrlBase}"><img src="${imgUrlBase}"><img src="${imgUrlBase}">
-              <img src="${imgUrlBase}">
+              <img src="${p.imgs ? p.imgs[0] : imgUrlBase}"> 
+              <img src="${p.imgs ? p.imgs[0] : imgUrlBase}"><img src="${p.imgs ? p.imgs[0] : imgUrlBase}">
+              <img src="${p.imgs ? p.imgs[0] : imgUrlBase}">
             </div>
             <div class="carousel-indicators">
               <span class="dot active" data-dot="0"></span>
