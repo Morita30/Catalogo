@@ -11,8 +11,8 @@ const productosData = [
     { c: "embrague", m: "nissan", n: "Kit Embrague NP300", p: 850 }
 ];
 
-// Relleno automático para pruebas (hasta 54 items)
-while(productosData.length < 54) {
+// Relleno automático para pruebas (hasta 20 items)
+while(productosData.length < 20) {
     let base = productosData[Math.floor(Math.random() * productosData.length)];
     productosData.push({...base, n: base.n + " " + productosData.length});
 }
